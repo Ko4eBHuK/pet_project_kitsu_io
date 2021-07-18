@@ -4,8 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
-import 'user_search_page.dart';
-import 'anime_search_page.dart';
+import 'user_engine/user_search_page.dart';
+import 'user_engine/user_info_page.dart';
+import 'anime_engine/anime_search_page.dart';
 
 void main() {
   runApp(App());
@@ -24,8 +25,8 @@ class App extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             primary: Color(0xff4a0072),
             onPrimary: Colors.white,
-            shadowColor: Colors.pinkAccent,
-            elevation: 15,
+            shadowColor: Colors.tealAccent,
+            elevation: 5,
             textStyle: TextStyle(
               fontSize: 25,
             ),
@@ -46,6 +47,7 @@ class App extends StatelessWidget {
         '/': (context) => HomePage(title: 'KITSU.IO APP home page'),
         '/UserSearch': (context) => UserSearchPage(),
         '/AnimeSearch': (context) => AnimeSearchPage(),
+        '/UserSearch/Result': (context) => UserInfoPage(),
       },
     );
   }
