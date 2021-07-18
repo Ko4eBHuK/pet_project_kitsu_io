@@ -14,16 +14,16 @@ Future<User> searchUserByName(String query) async {
   if (response.statusCode == 200) {
     var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
 
-    String avatarInfo = jsonResponse['data'][0]['attributes']['avatar'] != null
-        ? jsonResponse['data'][0]['attributes']['avatar']['original']
-        : 'no image';
-    String coverInfo = jsonResponse['data'][0]['attributes']['coverImage'] != null
-        ? jsonResponse['data'][0]['attributes']['coverImage']['original']
-        : 'no image';
-
     String waifuName = '';
 
     if (jsonResponse['meta']['count'] == 1) {
+      String avatarInfo = jsonResponse['data'][0]['attributes']['avatar'] != null
+          ? jsonResponse['data'][0]['attributes']['avatar']['original']
+          : 'no image';
+      String coverInfo = jsonResponse['data'][0]['attributes']['coverImage'] != null
+          ? jsonResponse['data'][0]['attributes']['coverImage']['original']
+          : 'no image';
+
       gettedUser = new User.fromNet(
         int.parse(jsonResponse['data'][0]['id']),
         jsonResponse['data'][0]['attributes']['name'],
@@ -37,9 +37,12 @@ Future<User> searchUserByName(String query) async {
       );
     }
 
-    var waifuResponse = await http.get(Uri.parse('https://kitsu.io/api/edge/users/${gettedUser.id}/waifu'));
+    var waifuResponse =
+        await http.get(Uri.parse('https://kitsu.io/api/edge/users/${gettedUser.id}/waifu'));
     var waifuJsonResponse = convert.jsonDecode(waifuResponse.body) as Map<String, dynamic>;
-    waifuName = waifuJsonResponse['data'] != null ? waifuJsonResponse['data']['attributes']['canonicalName'] : 'no waifu';
+    waifuName = waifuJsonResponse['data'] != null
+        ? waifuJsonResponse['data']['attributes']['canonicalName']
+        : 'no waifu';
 
     gettedUser.waifuLink = waifuName;
   } else {
