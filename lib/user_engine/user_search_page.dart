@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_project_kitsu_io/user_engine/user_class.dart';
+import 'package:pet_project_kitsu_io/services/request_engine.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class UserSearchPage extends StatefulWidget {
   const UserSearchPage({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class _UserSearchPageState extends State<UserSearchPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final usernameTextController = TextEditingController();
   static const _secondColor = Color(0xffff6090);
+  List<Widget> loadingColumnChildren = [];
 
   @override
   void dispose() {
@@ -59,37 +62,71 @@ class _UserSearchPageState extends State<UserSearchPage> {
                     return null;
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: ElevatedButton(
-                    style: ButtonStyle(),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.pushNamed(
-                          context,
-                          '/UserSearch/Result',
-                          arguments: User(
-                              1,
-                              'test_name',
-                              'test_location',
-                              'test_bDay',
-                              'test_gender',
-                              'test_waifuOrHusbando',
-                              'test_avatarImageLink',
-                              'test_coverImageLink',
-                              'test_waifuLink',
-                              'test_HusbandoLink',
-                              'test_libraryEntriesLink'),
-                        );
-                      }
-                    },
-                    child: Text(
-                      'Search',
-                      style: TextStyle(
-                        fontSize: 20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: ElevatedButton(
+                        style: ButtonStyle(),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              loadingColumnChildren.clear();
+                              loadingColumnChildren.add(
+                                SpinKitWave(
+                                  color: Colors.white,
+                                  size: 50.0,
+                                ),
+                              );
+                            });
+
+                            Future searchableUser =
+                                searchUserByName('https://kitsu.io/api/edge/users?filter[name]=${usernameTextController.text}');
+
+                            searchableUser.then((readyUser) {
+                              setState(() {
+                                loadingColumnChildren.clear();
+                              });
+
+                              User findedUser = readyUser;
+
+                              if (findedUser.id != 0) {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/UserSearch/Result',
+                                  arguments: readyUser,
+                                );
+                              } else {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) => AlertDialog(
+                                    title: const Text('User not found'),
+                                    content: const Text('User with this nickname does not exist, anyway you may try again :3'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, 'OK'),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            });
+                          }
+                        },
+                        child: Text(
+                          'Search',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Column(
+                      children: loadingColumnChildren,
+                    )
+                  ],
                 ),
               ],
             ),
