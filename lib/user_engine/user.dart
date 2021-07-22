@@ -35,4 +35,8 @@ class User {
   set waifuLink(String? value) {
     _waifuLink = value;
   }
+
+  set id(int value) {
+    _id = value;
+  }
 }

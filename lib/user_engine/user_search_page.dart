@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_project_kitsu_io/user_engine/user_class.dart';
+import 'package:pet_project_kitsu_io/user_engine/user.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -84,35 +84,55 @@ class _UserSearchPageState extends State<UserSearchPage> {
                             Future searchableUser =
                                 searchUserByName('https://kitsu.io/api/edge/users?filter[name]=${usernameTextController.text}');
 
-                            searchableUser.then((readyUser) {
-                              setState(() {
-                                loadingColumnChildren.clear();
-                              });
+                            searchableUser.then(
+                              (readyUser) {
+                                setState(() {
+                                  loadingColumnChildren.clear();
+                                });
 
-                              User findedUser = readyUser;
+                                User findedUser = readyUser;
 
-                              if (findedUser.id != 0) {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/UserSearch/Result',
-                                  arguments: readyUser,
-                                );
-                              } else {
-                                showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) => AlertDialog(
-                                    title: const Text('User not found'),
-                                    content: const Text('User with this nickname does not exist, anyway you may try again :3'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context, 'OK'),
-                                        child: const Text('OK'),
+                                switch (findedUser.id) {
+                                  case 0:
+                                    showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) => AlertDialog(
+                                        title: const Text('User not found'),
+                                        content:
+                                            const Text('User with this nickname does not exist, anyway you may try again :3'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context, 'OK'),
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            });
+                                    );
+                                    break;
+                                  case -1:
+                                    showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) => AlertDialog(
+                                        title: const Text('Internet connection error'),
+                                        content: const Text('Check your network please'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context, 'OK'),
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    break;
+                                  default:
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/UserSearch/Result',
+                                      arguments: readyUser,
+                                    );
+                                }
+                              },
+                            );
                           }
                         },
                         child: Text(

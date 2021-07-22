@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_project_kitsu_io/user_engine/user_class.dart';
+import 'package:pet_project_kitsu_io/user_engine/user.dart';
 import 'dart:convert' as convert;
 
 class UserInfoPage extends StatelessWidget {

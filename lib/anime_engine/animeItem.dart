@@ -1,4 +1,4 @@
-class Anime {
+class AnimeItem {
   final int? _id;
   final String? _startDate;
   final String? _description;
@@ -11,18 +11,8 @@ class Anime {
   final String? _showType;
   final bool? _nsfw;
 
-  const Anime(
-      this._id,
-      this._startDate,
-      this._description,
-      this._subtype,
-      this._ageRating,
-      this._posterImageLink,
-      this._coverImageLing,
-      this._episodeCount,
-      this._episodeLength,
-      this._showType,
-      this._nsfw);
+  const AnimeItem(this._id, this._startDate, this._description, this._subtype, this._ageRating, this._posterImageLink,
+      this._coverImageLing, this._episodeCount, this._episodeLength, this._showType, this._nsfw);
 
   bool? get nsfw => _nsfw;
 
