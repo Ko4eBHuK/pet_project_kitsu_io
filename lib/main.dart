@@ -18,12 +18,12 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'KITSU.IO',
       theme: ThemeData.dark().copyWith(
-        primaryColor: Color(0xff4a0072),
-        accentColor: Color(0xffff6090),
-        buttonColor: Color(0xffff6090),
+        primaryColor: const Color(0xff4a0072),
+        accentColor: const Color(0xffff6090),
+        buttonColor: const Color(0xffff6090),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            primary: Color(0xff4a0072),
+            primary: const Color(0xff4a0072),
             onPrimary: Colors.white,
             shadowColor: Colors.tealAccent,
             elevation: 5,
@@ -36,10 +36,10 @@ class App extends StatelessWidget {
             ),
           ),
         ),
-        hintColor: Color(0xffff6090),
+        hintColor: const Color(0xffff6090),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
-          foregroundColor: Color(0xffff6090),
-          backgroundColor: Color(0xff4a0072),
+          foregroundColor: const Color(0xffff6090),
+          backgroundColor: const Color(0xff4a0072),
         ),
       ),
       initialRoute: '/',

@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double _sizedBoxHeight = 120;
+  double _sizedBoxHeight = 100;
 
   @override
   Widget build(BuildContext context) {
@@ -18,43 +18,50 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SizedBox(
-              height: _sizedBoxHeight,
-            ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/UserSearch');
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('User search'),
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: _sizedBoxHeight,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/UserSearch');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('User search'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: _sizedBoxHeight,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/AnimeSearch');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Anime search'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: _sizedBoxHeight,
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(
-              height: _sizedBoxHeight,
-            ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/AnimeSearch');
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Anime search'),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: _sizedBoxHeight,
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

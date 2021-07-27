@@ -81,8 +81,7 @@ class _UserSearchPageState extends State<UserSearchPage> {
                               );
                             });
 
-                            Future searchableUser =
-                                searchUserByName('https://kitsu.io/api/edge/users?filter[name]=${usernameTextController.text}');
+                            Future searchableUser = searchUserByName(usernameTextController.text);
 
                             searchableUser.then(
                               (readyUser) {

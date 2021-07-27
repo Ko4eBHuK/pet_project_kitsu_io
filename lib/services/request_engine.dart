@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import '../user_engine/user.dart';
 
-Future<User> searchUserByName(String query) async {
-  var url = Uri.parse(query);
+Future<User> searchUserByName(String userName) async {
+  var url = Uri.parse('https://kitsu.io/api/edge/users?filter[name]=$userName');
 
   User gettedUser = User();
 
@@ -15,7 +15,7 @@ Future<User> searchUserByName(String query) async {
     print('Response status: ${response.statusCode}');
 
     if (response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      final jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
 
       String waifuName = '';
 
