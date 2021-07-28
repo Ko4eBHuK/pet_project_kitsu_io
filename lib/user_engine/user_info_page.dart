@@ -39,21 +39,21 @@ class UserInfoPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: _basicTextPadding, right: _basicTextPadding, top: _basicTextPadding),
                       child: Text(
-                        'User\'s birth date: ${currentUser.bDay}',
+                        'User\'s birth date: ${currentUser.bDay == null ? 'not set' : currentUser.bDay}',
                         style: _basicTextStyle,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: _basicTextPadding, right: _basicTextPadding, top: _basicTextPadding),
                       child: Text(
-                        'User\'s gender: ${currentUser.gender}',
+                        'User\'s gender: ${currentUser.gender == null ? 'not set' : currentUser.gender}',
                         style: _basicTextStyle,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(_basicTextPadding),
                       child: Text(
-                        'User\'s waifu: ${currentUser.waifuLink}',
+                        'User\'s waifu: ${currentUser.waifuName == null ? 'not set' : currentUser.waifuName}',
                         style: _basicTextStyle,
                       ),
                     ),
@@ -65,20 +65,11 @@ class UserInfoPage extends StatelessWidget {
                 child: SizedBox(
                   width: 200,
                   height: 40,
-                  child: TextButton(
-                    //TODO make anime list business and connect it here
+                  child: ElevatedButton(
                     onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        Color(0xff4a0072),
-                      ),
-                    ),
                     child: Text(
                       'Show user\'s library',
-                      style: TextStyle(
-                        color: Color(0xffff6090),
-                        fontSize: 18,
-                      ),
+                      style: _basicTextStyle,
                     ),
                   ),
                 ),
@@ -99,7 +90,7 @@ class UserInfoPage extends StatelessWidget {
                       ),
                       currentUser.avatarImageLink == 'no image'
                           ? Image.asset('images/no_photo.png')
-                          : Image.network(currentUser.avatarImageLink),
+                          : Image.network(currentUser.avatarImageLink!),
                     ],
                   ),
                 ),
@@ -121,7 +112,7 @@ class UserInfoPage extends StatelessWidget {
                       ),
                       currentUser.coverImageLink == 'no image'
                           ? Image.asset('images/no_photo.png')
-                          : Image.network(currentUser.coverImageLink),
+                          : Image.network(currentUser.coverImageLink!),
                     ],
                   ),
                 ),
