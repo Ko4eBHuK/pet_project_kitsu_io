@@ -88,7 +88,7 @@ class UserInfoPage extends StatelessWidget {
                         color: Colors.purpleAccent,
                         thickness: 1,
                       ),
-                      currentUser.avatarImageLink == 'no image'
+                      currentUser.avatarImageLink == null
                           ? Image.asset('images/no_photo.png')
                           : Image.network(currentUser.avatarImageLink!),
                     ],
@@ -110,7 +110,7 @@ class UserInfoPage extends StatelessWidget {
                         color: Colors.purpleAccent,
                         thickness: 1,
                       ),
-                      currentUser.coverImageLink == 'no image'
+                      currentUser.coverImageLink == null
                           ? Image.asset('images/no_photo.png')
                           : Image.network(currentUser.coverImageLink!),
                     ],

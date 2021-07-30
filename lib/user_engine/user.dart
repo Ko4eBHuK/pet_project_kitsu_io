@@ -10,9 +10,6 @@ class User {
 
   User();
 
-  User.fromNet(this._id, this._name, this._bDay, this._gender, this._avatarImageLink, this._coverImageLink, this._waifuName,
-      this._libraryEntriesLink);
-
   User.fromJson(Map<String, dynamic> json) {
     this._id = int.parse(json['data'][0]['id']);
     this._name = json['data'][0]['attributes']['name'];
@@ -22,9 +19,8 @@ class User {
     this._avatarImageLink =
         json['data'][0]['attributes']['avatar'] != null ? json['data'][0]['attributes']['avatar']['original'] : null;
 
-    this._coverImageLink = json['data'][0]['attributes']['coverImage'] != null
-        ? json['data'][0]['attributes']['coverImage']['original']
-        : 'no image';
+    this._coverImageLink =
+        json['data'][0]['attributes']['coverImage'] != null ? json['data'][0]['attributes']['coverImage']['original'] : null;
 
     this._libraryEntriesLink = json['data'][0]['relationships']['libraryEntries']['links']['related'];
   }
