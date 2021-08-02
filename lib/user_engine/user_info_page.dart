@@ -72,7 +72,9 @@ class UserInfoPage extends StatelessWidget {
                       width: 200,
                       height: 40,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // TODO - navigate to anime_list page that connects to user's library
+                        },
                         child: Text(
                           'Show user\'s library',
                           style: _basicTextStyle,

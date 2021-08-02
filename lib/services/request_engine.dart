@@ -33,3 +33,7 @@ Future<User> searchUserByName(String userName) async {
     return gettedUser;
   }
 }
+
+// TODO - develop anime search engine
+//example of multi-filter request
+//https://kitsu.io/api/edge/anime?filter[ageRating]=PG,R,R18&filter[season]=winter

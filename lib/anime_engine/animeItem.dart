@@ -1,18 +1,31 @@
 class AnimeItem {
-  final int? _id;
-  final String? _startDate;
-  final String? _description;
-  final String? _subtype;
-  final String? _ageRating;
-  final String? _posterImageLink;
-  final String? _coverImageLing;
-  final int? _episodeCount;
-  final int? _episodeLength;
-  final String? _showType;
-  final bool? _nsfw;
+  int? _id;
+  String? _startDate;
+  String? _description;
+  String? _subtype;
+  String? _ageRating;
+  String? _posterImageLink;
+  String? _coverImageLing;
+  int? _episodeCount;
+  int? _episodeLength;
+  String? _showType;
+  bool? _nsfw;
 
-  const AnimeItem(this._id, this._startDate, this._description, this._subtype, this._ageRating, this._posterImageLink,
-      this._coverImageLing, this._episodeCount, this._episodeLength, this._showType, this._nsfw);
+  AnimeItem();
+
+  AnimeItem.fromJson(Map<String, dynamic> json) {
+    _id = int.parse(json['data']['id']);
+    _startDate = json['data']['attributes']['startDate'];
+    _description = json['data']['attributes']['description'];
+    _subtype = json['data']['attributes']['subtype'];
+    _ageRating = json['data']['attributes']['ageRating'];
+    _posterImageLink = json['data']['attributes']['posterImage']['original'];
+    _coverImageLing = json['data']['attributes']['coverImage']['original'];
+    _episodeCount = json['data']['attributes']['episodeCount'];
+    _episodeLength = json['data']['attributes']['episodeLength'];
+    _showType = json['data']['attributes']['showType'];
+    _nsfw = json['data']['attributes']['nsfw'];
+  }
 
   bool? get nsfw => _nsfw;
 
