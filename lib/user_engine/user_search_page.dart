@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pet_project_kitsu_io/user_engine/user.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'dart:io';
 
 class UserSearchPage extends StatefulWidget {
   const UserSearchPage({Key? key}) : super(key: key);
@@ -96,9 +97,7 @@ class _UserSearchPageState extends State<UserSearchPage> {
                                           loadingColumnChildren.clear();
                                         });
 
-                                        User findedUser = readyUser;
-
-                                        switch (findedUser.id) {
+                                        switch (readyUser.id) {
                                           case 0:
                                             showDialog<String>(
                                               context: context,
@@ -120,7 +119,7 @@ class _UserSearchPageState extends State<UserSearchPage> {
                                               context: context,
                                               builder: (BuildContext context) => AlertDialog(
                                                 title: const Text('Internet connection error'),
-                                                content: const Text('Check your network please'),
+                                                content: const Text('Check your network'),
                                                 actions: <Widget>[
                                                   TextButton(
                                                     onPressed: () => Navigator.pop(context, 'OK'),

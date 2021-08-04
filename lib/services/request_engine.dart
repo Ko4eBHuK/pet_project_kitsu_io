@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-import '../user_engine/user.dart';
+import '/user_engine/user.dart';
+import '/anime_engine/animeItem.dart';
 
 Future<User> searchUserByName(String userName) async {
   var url = Uri.parse('https://kitsu.io/api/edge/users?filter[name]=$userName');
@@ -28,11 +29,13 @@ Future<User> searchUserByName(String userName) async {
     }
 
     return gettedUser;
-  } on SocketException catch (e) {
+  } on SocketException {
     gettedUser.id = -1;
     return gettedUser;
   }
 }
+
+//Future<List<AnimeItem>> searchAnimeUsingFilters() async {}
 
 // TODO - develop anime search engine
 //example of multi-filter request

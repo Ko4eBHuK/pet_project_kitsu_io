@@ -7,6 +7,8 @@ import 'home_page.dart';
 import 'user_engine/user_search_page.dart';
 import 'user_engine/user_info_page.dart';
 import 'anime_engine/anime_search_page.dart';
+import 'anime_engine/anime_list_page.dart';
+import 'anime_engine/anime_info_page.dart';
 
 void main() {
   runApp(App());
@@ -48,9 +50,9 @@ class App extends StatelessWidget {
         '/UserSearch': (context) => UserSearchPage(),
         '/AnimeSearch': (context) => AnimeSearchPage(),
         '/UserSearch/Result': (context) => UserInfoPage(),
+        '/AnimeSearch/Results': (context) => AnimeList(),
+        '/AnimeSearch/Item': (context) => AnimeInfoPage(),
       },
     );
   }
 }
-
-// TODO - set the anime_search branch's routes
