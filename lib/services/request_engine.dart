@@ -16,7 +16,7 @@ Future<User> searchUserByName(String userName) async {
     if (response.statusCode == 200) {
       final jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
 
-      if (jsonResponse['meta']['count'] == 1) {
+      if (jsonResponse['meta']['count'] >= 1) {
         gettedUser = User.fromJson(jsonResponse);
 
         var waifuResponse = await http.get(Uri.parse('https://kitsu.io/api/edge/users/${gettedUser.id}/waifu'));
@@ -35,7 +35,10 @@ Future<User> searchUserByName(String userName) async {
   }
 }
 
-//Future<List<AnimeItem>> searchAnimeUsingFilters() async {}
+Future<List<AnimeItem>> searchAnimeUsingFilters(Map<String, String> filters) async {
+  List<AnimeItem> AnimeList = [];
+  return AnimeList;
+}
 
 // TODO - develop anime search engine
 //example of multi-filter request
