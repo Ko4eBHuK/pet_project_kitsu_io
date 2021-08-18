@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_project_kitsu_io/user_engine/user.dart';
-import 'dart:convert' as convert;
 
 class UserInfoPage extends StatelessWidget {
   @override
@@ -74,6 +73,10 @@ class UserInfoPage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           // TODO - navigate to anime_list page that connects to user's library
+                          Navigator.pushNamed(
+                            context,
+                            '/AnimeSearch/Results',
+                          );
                         },
                         child: Text(
                           'Show user\'s library',
