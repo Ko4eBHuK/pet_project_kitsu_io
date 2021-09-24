@@ -33,20 +33,29 @@ class _AnimeListState extends State<AnimeList> {
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          //test area
+          //this algorithm compute how to show items in anime list
+
+          //  this list contains cards, which represent each anime in kitsu's server response
           List<AnimeCard> animeCardList = [];
+
           AnimeItem anime = AnimeItem();
+          //  this is list of a rows that collects animeCards
           List<Row> rowList = [];
+
           double cardHeight = 200.0;
           double cardWidth = 160.0;
 
+          //test line of code that fills animeCardList
           while (animeCardList.length < 7) animeCardList.add(AnimeCard(anime, cardHeight, cardWidth));
 
+          //  max items in row
           int itemCountInRow = constraints.maxWidth ~/ cardWidth;
 
+          //  demandable number of rows
           int rowCount = animeCardList.length ~/ itemCountInRow;
           if (animeCardList.length % itemCountInRow != 0) rowCount++;
 
+          //  fill rows with animeCards
           for (int i = 0; i < rowCount; i++) {
             rowList.add(
               Row(
@@ -60,6 +69,7 @@ class _AnimeListState extends State<AnimeList> {
               ),
             );
           }
+          //end of algorithm
 
           return SingleChildScrollView(
             child: Column(

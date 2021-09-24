@@ -19,10 +19,12 @@ Future<User> searchUserByName(String userName) async {
       if (jsonResponse['meta']['count'] >= 1) {
         gettedUser = User.fromJson(jsonResponse);
 
-        var waifuResponse = await http.get(Uri.parse('https://kitsu.io/api/edge/users/${gettedUser.id}/waifu'));
+        var waifuResponse =
+            await http.get(Uri.parse('https://kitsu.io/api/edge/users/${gettedUser.id}/waifu'));
         var waifuJsonResponse = convert.jsonDecode(waifuResponse.body) as Map<String, dynamic>;
-        gettedUser.waifuName =
-            waifuJsonResponse['data'] != null ? waifuJsonResponse['data']['attributes']['canonicalName'] : null;
+        gettedUser.waifuName = waifuJsonResponse['data'] != null
+            ? waifuJsonResponse['data']['attributes']['canonicalName']
+            : null;
       }
     } else {
       print('Request failed with status: ${response.statusCode}.');
