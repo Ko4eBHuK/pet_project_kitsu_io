@@ -1,5 +1,5 @@
 import 'dart:ffi';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'anime_item_card.dart';
@@ -7,18 +7,16 @@ import 'animeItem.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-//TODO - create filter page here
+//TODO - compose all filters and do a request
 
 //possible filters:
 /*
   [text]=One%20Punch%20Man
   [ageRating]=G / PG,R,R18
-  [season]=winter, spring, summer, fall
-  [seasonYear]=2017 / 2005,2006
   [streamers]=Hulu,Funimation,Crunchyroll,CONtv,Netflix,HIDIVE,TubiTV,Amazon,YouTube,AnimeLab,VRV
+  [season]=winter, spring, summer, fall
+  [seasonYear]=2017
 */
-
-List<String> _seasonOptions = ['Winter', 'Spring', 'Summer', 'Fall'];
 
 class AnimeSearchPage extends StatefulWidget {
   const AnimeSearchPage({Key? key}) : super(key: key);
@@ -31,10 +29,8 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   static const _accentColor = Color(0xffff6090);
   final textFilterController = TextEditingController();
-  bool? _gOption = false;
-  bool? _pgOption = false;
-  bool? _rOption = false;
-  bool? _r18Option = false;
+
+  Map<String, bool?> _ageRatingMap = {'G': false, 'PG': false, 'R': false, 'R18': false};
 
   Map<String, bool?> _streamersMap = {
     'Hulu': false,
@@ -50,10 +46,41 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
     'VRV': false
   };
 
+  Map<String, bool?> _seasonsMap = {'winter': false, 'spring': false, 'summer': false, 'fall': false};
+
+  DateTime _yearFilterSelectedDate = DateTime.now();
+
+  bool _yearHasBeenChanged = false;
+
+  List<Widget> _createAgeRatingFilterRowChildren() {
+    return new List<Widget>.generate(
+      _ageRatingMap.length,
+      (int index) {
+        return Container(
+          child: Row(
+            children: [
+              Checkbox(
+                value: _ageRatingMap.values.elementAt(index),
+                onChanged: (bool? newVal) {
+                  setState(() {
+                    _ageRatingMap[_ageRatingMap.keys.elementAt(index)] = newVal;
+                  });
+                },
+              ),
+              Text(_ageRatingMap.keys.elementAt(index)),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _divider = Divider(
     color: Colors.purpleAccent,
     thickness: 1,
   );
+
+  var _spinWaveColor = Colors.white10;
 
   @override
   void dispose() {
@@ -88,12 +115,25 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const SpinKitWave(
-                                color: Colors.white,
+                              SpinKitWave(
+                                color: _spinWaveColor,
                                 size: 50.0,
                               ),
                               ElevatedButton(
                                 onPressed: () {
+                                  setState(() {
+                                    _spinWaveColor = Colors.white;
+                                  });
+
+                                  print(_ageRatingMap);
+                                  print(_streamersMap);
+                                  print(_seasonsMap);
+                                  print(_yearHasBeenChanged);
+                                  print(_yearFilterSelectedDate);
+
+                                  setState(() {
+                                    _spinWaveColor = Colors.white10;
+                                  });
                                   Navigator.pushNamed(
                                     context,
                                     '/AnimeSearch/Results',
@@ -106,8 +146,8 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                                   ),
                                 ),
                               ),
-                              const SpinKitWave(
-                                color: Colors.white,
+                              SpinKitWave(
+                                color: _spinWaveColor,
                                 size: 50.0,
                               ),
                             ],
@@ -119,137 +159,94 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                               fontStyle: FontStyle.italic,
                             ),
                           ),
-                          _divider,
                         ],
                       ),
                       // SizedBox with scrollable list of anime filters
                       //   this SizedBox here for the reason to give the "Search" button a fixed position
                       SizedBox(
-                        height: constraints.maxHeight * 0.75,
+                        height: constraints.maxHeight * 0.78,
                         child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              // filter that allows to select animes with defined words
-                              Text('Anime keywords'),
-                              TextFormField(
-                                controller: textFilterController,
-                                style: TextStyle(
-                                  color: _accentColor,
-                                  fontSize: 22,
-                                ),
-                                decoration: const InputDecoration(
-                                  labelText: 'Type any text',
-                                  labelStyle: TextStyle(fontSize: 18),
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  icon: Icon(
-                                    Icons.text_fields_sharp,
+                          child: Container(
+                            color: Colors.white10,
+                            child: Column(
+                              children: [
+                                // filter that allows to select animes with defined words
+                                _divider,
+                                Text('Anime keywords'),
+                                TextFormField(
+                                  controller: textFilterController,
+                                  style: TextStyle(
                                     color: _accentColor,
-                                    size: 40,
+                                    fontSize: 22,
+                                  ),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Type any text',
+                                    labelStyle: TextStyle(fontSize: 18),
+                                    hintStyle: TextStyle(fontSize: 18),
+                                    icon: Icon(
+                                      Icons.text_fields_sharp,
+                                      color: _accentColor,
+                                      size: 40,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              _divider,
-                              Text('Age rating'),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Text('G'),
-                                        Checkbox(
-                                          value: _gOption,
-                                          onChanged: (bool? newVal) {
-                                            setState(() {
-                                              _gOption = newVal;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Text('PG'),
-                                        Checkbox(
-                                          value: _pgOption,
-                                          onChanged: (bool? newVal) {
-                                            setState(() {
-                                              _pgOption = newVal;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Text('R'),
-                                        Checkbox(
-                                          value: _rOption,
-                                          onChanged: (bool? newVal) {
-                                            setState(() {
-                                              _rOption = newVal;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Text('R18'),
-                                        Checkbox(
-                                          value: _r18Option,
-                                          onChanged: (bool? newVal) {
-                                            setState(() {
-                                              _r18Option = newVal;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              _divider,
-                              Container(
-                                child: Column(
-                                  children: [
-                                    Text('Streamers'),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        print(_streamersMap);
-                                      },
-                                      child: Text('Show Streamers options'),
-                                    ),
-                                    ListView.builder(
-                                      itemCount: _streamersMap.length,
-                                      primary: false,
-                                      shrinkWrap: true,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return ListTile(
-                                          leading: Checkbox(
-                                            value: _streamersMap.values.elementAt(index),
-                                            onChanged: (bool? newVal) {
-                                              setState(() {
-                                                _streamersMap[_streamersMap.keys.elementAt(index)] =
-                                                    newVal;
-                                              });
-                                            },
-                                          ),
-                                          title: Text(_streamersMap.keys.elementAt(index)),
-                                        );
-                                      },
-                                    )
-                                  ],
+                                _divider,
+                                Text('Age rating'),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: _createAgeRatingFilterRowChildren(),
                                 ),
-                              ),
-                              _divider,
-                            ],
+                                _divider,
+                                Container(
+                                  child: Column(
+                                    children: [
+                                      Text('Streamers'),
+                                      ListView.builder(
+                                        itemCount: _streamersMap.length,
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          return ListTile(
+                                            leading: Checkbox(
+                                              value: _streamersMap.values.elementAt(index),
+                                              onChanged: (bool? newVal) {
+                                                setState(() {
+                                                  _streamersMap[_streamersMap.keys.elementAt(index)] =
+                                                      newVal;
+                                                });
+                                              },
+                                            ),
+                                            title: Text(_streamersMap.keys.elementAt(index)),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                _divider,
+                                Text('Year'),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: 180,
+                                    height: 180,
+                                    color: Colors.white12,
+                                    child: YearPicker(
+                                      firstDate: DateTime(1907),
+                                      lastDate: DateTime(DateTime.now().year),
+                                      selectedDate: _yearFilterSelectedDate,
+                                      onChanged: (DateTime dateTime) {
+                                        setState(() {
+                                          _yearFilterSelectedDate = dateTime;
+                                          if (!_yearHasBeenChanged) _yearHasBeenChanged = true;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                _divider,
+                              ],
+                            ),
                           ),
                         ),
                       ),
