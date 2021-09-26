@@ -19,24 +19,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 */
 
 List<String> _seasonOptions = ['Winter', 'Spring', 'Summer', 'Fall'];
-List<String> _streamerOptions = [
-  'Hulu',
-  'Funimation',
-  'Crunchyroll',
-  'CONtv',
-  'Netflix',
-  'HIDIVE',
-  'TubiTV',
-  'Amazon',
-  'YouTube',
-  'AnimeLab',
-  'VRV'
-];
-
-var _divider = Divider(
-  color: Colors.purpleAccent,
-  thickness: 1,
-);
 
 class AnimeSearchPage extends StatefulWidget {
   const AnimeSearchPage({Key? key}) : super(key: key);
@@ -53,17 +35,25 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
   bool? _pgOption = false;
   bool? _rOption = false;
   bool? _r18Option = false;
-  bool? _HuluOption = false;
-  bool? _FunimationOption = false;
-  bool? _CrunchyrollOption = false;
-  bool? _CONtvOption = false;
-  bool? _NetflixOption = false;
-  bool? _HIDIVEOption = false;
-  bool? _TubiTVOption = false;
-  bool? _AmazonOption = false;
-  bool? _YouTubeOption = false;
-  bool? _AnimeLabOption = false;
-  bool? _VRVOption = false;
+
+  Map<String, bool?> _streamersMap = {
+    'Hulu': false,
+    'Funimation': false,
+    'Crunchyroll': false,
+    'CONtv': false,
+    'Netflix': false,
+    'HIDIVE': false,
+    'TubiTV': false,
+    'Amazon': false,
+    'YouTube': false,
+    'AnimeLab': false,
+    'VRV': false
+  };
+
+  Widget _divider = Divider(
+    color: Colors.purpleAccent,
+    thickness: 1,
+  );
 
   @override
   void dispose() {
@@ -92,323 +82,175 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: constraints.maxHeight * 0.2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const SpinKitWave(
-                              color: Colors.white,
-                              size: 50.0,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/AnimeSearch/Results',
-                                );
-                              },
-                              child: Text(
-                                'Search',
-                                style: TextStyle(
-                                  fontSize: 20,
+                      // Column with "Search" button and title
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SpinKitWave(
+                                color: Colors.white,
+                                size: 50.0,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/AnimeSearch/Results',
+                                  );
+                                },
+                                child: Text(
+                                  'Search',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
                                 ),
                               ),
+                              const SpinKitWave(
+                                color: Colors.white,
+                                size: 50.0,
+                              ),
+                            ],
+                          ),
+                          Text(
+                            'Anime filters:',
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontStyle: FontStyle.italic,
                             ),
-                            const SpinKitWave(
-                              color: Colors.white,
-                              size: 50.0,
-                            ),
-                          ],
-                        ),
+                          ),
+                          _divider,
+                        ],
                       ),
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Text(
-                              'Anime filters:',
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                            _divider,
-                            Text('Anime keywords'),
-                            TextFormField(
-                              controller: textFilterController,
-                              style: TextStyle(
-                                color: _accentColor,
-                                fontSize: 22,
-                              ),
-                              decoration: const InputDecoration(
-                                labelText: 'Type any text',
-                                labelStyle: TextStyle(fontSize: 18),
-                                hintStyle: TextStyle(fontSize: 18),
-                                icon: Icon(
-                                  Icons.text_fields_sharp,
+                      // SizedBox with scrollable list of anime filters
+                      //   this SizedBox here for the reason to give the "Search" button a fixed position
+                      SizedBox(
+                        height: constraints.maxHeight * 0.75,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              // filter that allows to select animes with defined words
+                              Text('Anime keywords'),
+                              TextFormField(
+                                controller: textFilterController,
+                                style: TextStyle(
                                   color: _accentColor,
-                                  size: 40,
+                                  fontSize: 22,
+                                ),
+                                decoration: const InputDecoration(
+                                  labelText: 'Type any text',
+                                  labelStyle: TextStyle(fontSize: 18),
+                                  hintStyle: TextStyle(fontSize: 18),
+                                  icon: Icon(
+                                    Icons.text_fields_sharp,
+                                    color: _accentColor,
+                                    size: 40,
+                                  ),
                                 ),
                               ),
-                            ),
-                            _divider,
-                            Container(
-                              child: Column(
+                              _divider,
+                              Text('Age rating'),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text('Age rating'),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('G'),
-                                            Checkbox(
-                                              value: _gOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _gOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Text('G'),
+                                        Checkbox(
+                                          value: _gOption,
+                                          onChanged: (bool? newVal) {
+                                            setState(() {
+                                              _gOption = newVal;
+                                            });
+                                          },
                                         ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('PG'),
-                                            Checkbox(
-                                              value: _pgOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _pgOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Text('PG'),
+                                        Checkbox(
+                                          value: _pgOption,
+                                          onChanged: (bool? newVal) {
+                                            setState(() {
+                                              _pgOption = newVal;
+                                            });
+                                          },
                                         ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('R'),
-                                            Checkbox(
-                                              value: _rOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _rOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Text('R'),
+                                        Checkbox(
+                                          value: _rOption,
+                                          onChanged: (bool? newVal) {
+                                            setState(() {
+                                              _rOption = newVal;
+                                            });
+                                          },
                                         ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('R18'),
-                                            Checkbox(
-                                              value: _r18Option,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _r18Option = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Text('R18'),
+                                        Checkbox(
+                                          value: _r18Option,
+                                          onChanged: (bool? newVal) {
+                                            setState(() {
+                                              _r18Option = newVal;
+                                            });
+                                          },
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                            _divider,
-                            Container(
-                              child: Column(
-                                children: [
-                                  Text('Streamers'),
-                                  GridView.count(
-                                    crossAxisCount: 2,
-                                    primary: false,
-                                    crossAxisSpacing: 0,
-                                    mainAxisSpacing: 0,
-                                    padding: const EdgeInsets.all(10),
-                                    shrinkWrap: true,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('G'),
-                                            Checkbox(
-                                              value: _gOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _gOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('PG'),
-                                            Checkbox(
-                                              value: _pgOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _pgOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('R'),
-                                            Checkbox(
-                                              value: _rOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _rOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('R18'),
-                                            Checkbox(
-                                              value: _r18Option,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _r18Option = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('G'),
-                                            Checkbox(
-                                              value: _gOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _gOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('PG'),
-                                            Checkbox(
-                                              value: _pgOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _pgOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('R'),
-                                            Checkbox(
-                                              value: _rOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _rOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('R18'),
-                                            Checkbox(
-                                              value: _r18Option,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _r18Option = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('G'),
-                                            Checkbox(
-                                              value: _gOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _gOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('PG'),
-                                            Checkbox(
-                                              value: _pgOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _pgOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text('R'),
-                                            Checkbox(
-                                              value: _rOption,
-                                              onChanged: (bool? newVal) {
-                                                setState(() {
-                                                  _rOption = newVal;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              _divider,
+                              Container(
+                                child: Column(
+                                  children: [
+                                    Text('Streamers'),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        print(_streamersMap);
+                                      },
+                                      child: Text('Show Streamers options'),
+                                    ),
+                                    ListView.builder(
+                                      itemCount: _streamersMap.length,
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return ListTile(
+                                          leading: Checkbox(
+                                            value: _streamersMap.values.elementAt(index),
+                                            onChanged: (bool? newVal) {
+                                              setState(() {
+                                                _streamersMap[_streamersMap.keys.elementAt(index)] =
+                                                    newVal;
+                                              });
+                                            },
+                                          ),
+                                          title: Text(_streamersMap.keys.elementAt(index)),
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            _divider,
-                          ],
+                              _divider,
+                            ],
+                          ),
                         ),
                       ),
                     ],
