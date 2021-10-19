@@ -37,9 +37,27 @@ Future<User> searchUserByName(String userName) async {
   }
 }
 
-Future<List<AnimeItem>> searchAnimeUsingFilters(Map<String, String> filters) async {
+Future<List<AnimeItem>> searchAnimeUsingFilters(String query) async {
   List<AnimeItem> AnimeList = [];
-  return AnimeList;
+
+  final url = Uri.parse('https://kitsu.io/api/edge/anime?$query');
+
+  try {
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final jsonAnimeList = convert.jsonDecode(response.body) as Map<String, dynamic>;
+
+      // TODO - распарсить ответ и отдать на вьюху
+
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+
+    return AnimeList;
+  } on SocketException {
+    return AnimeList;
+  }
 }
 
 // TODO - develop anime search engine

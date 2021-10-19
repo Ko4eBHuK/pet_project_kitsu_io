@@ -2,21 +2,10 @@ import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'anime_item_card.dart';
-import 'animeItem.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-//TODO - compose all filters and do a request
-
-//possible filters:
-/*
-  [text]=One%20Punch%20Man
-  [ageRating]=G / PG,R,R18
-  [streamers]=Hulu,Funimation,Crunchyroll,CONtv,Netflix,HIDIVE,TubiTV,Amazon,YouTube,AnimeLab,VRV
-  [season]=winter, spring, summer, fall
-  [seasonYear]=2017
-*/
+import 'animeItem.dart';
 
 class AnimeSearchPage extends StatefulWidget {
   const AnimeSearchPage({Key? key}) : super(key: key);
@@ -46,11 +35,18 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
     'VRV': false
   };
 
-  Map<String, bool?> _seasonsMap = {'winter': false, 'spring': false, 'summer': false, 'fall': false};
-
   DateTime _yearFilterSelectedDate = DateTime.now();
 
   bool _yearHasBeenChanged = false;
+
+  final Widget _divider = Divider(
+    color: Colors.purpleAccent,
+    thickness: 1,
+  );
+
+  Widget _searchButtonNeighbour = Container();
+
+  var _spinWaveColor = Colors.white10;
 
   List<Widget> _createAgeRatingFilterRowChildren() {
     return new List<Widget>.generate(
@@ -75,12 +71,43 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
     );
   }
 
-  Widget _divider = Divider(
-    color: Colors.purpleAccent,
-    thickness: 1,
-  );
+  String _composeFilters() {
+    // to return results in rating from TOP-1 to TOP-10 by user rating
+    String query = 'sort=-averageRating';
 
-  var _spinWaveColor = Colors.white10;
+    final textFilterRequestString = textFilterController.text;
+
+    // composing text filter part to query
+    if (textFilterRequestString.length > 0) {
+      query += '&filter[text]=';
+      query += textFilterRequestString.replaceAll(' ', '+');
+    }
+
+    // composing age rating filter part
+    if (_ageRatingMap.values.contains(true)) {
+      query += '&filter[ageRating]=';
+      _ageRatingMap.forEach((key, value) {
+        if (value!) query += key + ',';
+      });
+      query = query.substring(0, query.length - 1);
+    }
+
+    // composing streamers filter part
+    if (_streamersMap.values.contains(true)) {
+      query += '&filter[streamers]=';
+      _streamersMap.forEach((key, value) {
+        if (value!) query += key + ',';
+      });
+      query = query.substring(0, query.length - 1);
+    }
+
+    // composing year filter part
+    if (_yearHasBeenChanged) {
+      query += '&filter[seasonYear]=${_yearFilterSelectedDate.year}';
+    }
+
+    return query;
+  }
 
   @override
   void dispose() {
@@ -107,59 +134,14 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Column with "Search" button and title
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SpinKitWave(
-                                color: _spinWaveColor,
-                                size: 50.0,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _spinWaveColor = Colors.white;
-                                  });
-
-                                  print(_ageRatingMap);
-                                  print(_streamersMap);
-                                  print(_seasonsMap);
-                                  print(_yearHasBeenChanged);
-                                  print(_yearFilterSelectedDate);
-
-                                  setState(() {
-                                    _spinWaveColor = Colors.white10;
-                                  });
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/AnimeSearch/Results',
-                                  );
-                                },
-                                child: Text(
-                                  'Search',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                              SpinKitWave(
-                                color: _spinWaveColor,
-                                size: 50.0,
-                              ),
-                            ],
-                          ),
-                          Text(
-                            'Anime filters:',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        'Anime filters:',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                       // SizedBox with scrollable list of anime filters
                       //   this SizedBox here for the reason to give the "Search" button a fixed position
@@ -249,6 +231,42 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                             ),
                           ),
                         ),
+                      ),
+                      // "Search" button row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _searchButtonNeighbour,
+                          ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                _searchButtonNeighbour = SpinKitWave(
+                                  color: Colors.white,
+                                  size: 50.0,
+                                );
+                              });
+
+                              // request performs here
+                              List<AnimeItem> responsedAnimeList =
+                                  await searchAnimeUsingFilters(_composeFilters());
+
+                              setState(() {
+                                _searchButtonNeighbour = Container();
+                              });
+                              // Navigator.pushNamed(
+                              //   context,
+                              //   '/AnimeSearch/Results',
+                              // );
+                            },
+                            child: Text(
+                              'Search',
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          _searchButtonNeighbour,
+                        ],
                       ),
                     ],
                   ),
