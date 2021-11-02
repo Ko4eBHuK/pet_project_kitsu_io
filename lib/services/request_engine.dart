@@ -48,8 +48,22 @@ Future<List<AnimeItem>> searchAnimeUsingFilters(String query) async {
     if (response.statusCode == 200) {
       final jsonAnimeList = convert.jsonDecode(response.body) as Map<String, dynamic>;
 
-      // TODO - распарсить ответ и отдать на вьюху
+      final animeCount = jsonAnimeList['meta']['count'];
 
+      // TODO - закончить логику формирования листа
+
+      // logic of composing anime list:
+      //    1) if there are 1 to 10 animes, then just push them to list
+      //    2) if there are more than 10 animes, then push top-10 animes and one more "service" anime,
+      //    which has id equals -1
+      //    3) if there are no animes, do nothing
+      // this logic helps to show info for user
+
+      if (animeCount <= 10) {
+        for (int i = 0; i < animeCount; i++) {
+          AnimeList.add(AnimeItem.fromJson(jsonAnimeList['data'][i]));
+        }
+      }
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -59,7 +73,3 @@ Future<List<AnimeItem>> searchAnimeUsingFilters(String query) async {
     return AnimeList;
   }
 }
-
-// TODO - develop anime search engine
-//example of multi-filter request
-//https://kitsu.io/api/edge/anime?filter[ageRating]=PG,R,R18&filter[season]=winter
