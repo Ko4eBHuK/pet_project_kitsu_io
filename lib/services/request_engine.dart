@@ -63,7 +63,19 @@ Future<List<AnimeItem>> searchAnimeUsingFilters(String query) async {
         for (int i = 0; i < animeCount; i++) {
           AnimeList.add(AnimeItem.fromJson(jsonAnimeList['data'][i]));
         }
+      } else {
+        for (int i = 0; i < 10; i++) {
+          AnimeList.add(AnimeItem.fromJson(jsonAnimeList['data'][i]));
+        }
+        AnimeList.add(AnimeItem());
       }
+
+      print(animeCount);
+      AnimeList.forEach((element) {
+        print('${element.title} ${element.rating}');
+      });
+
+      print(url);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }

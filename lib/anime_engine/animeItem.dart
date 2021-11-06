@@ -1,5 +1,5 @@
 class AnimeItem {
-  int? _id;
+  int _id = -1;
   String? _title;
   double? _rating;
   String? _startDate;
@@ -15,11 +15,13 @@ class AnimeItem {
 
   AnimeItem.fromJson(Map<String, dynamic> json) {
     _id = int.parse(json['id']);
+    _title = json['attributes']['canonicalTitle'];
+    _rating = double.parse(json['attributes']['averageRating']);
     _startDate = json['attributes']['startDate'];
     _description = json['attributes']['description'];
     _ageRating = json['attributes']['ageRating'];
-    _posterImageLink = json['attributes']['posterImage']['original'];
-    _coverImageLing = json['attributes']['coverImage']['original'];
+    _posterImageLink = json['attributes']['posterImage']?['original'];
+    _coverImageLing = json['attributes']['coverImage']?['original'];
     _episodeCount = json['attributes']['episodeCount'];
     _episodeLength = json['attributes']['episodeLength'];
     _showType = json['attributes']['showType'];
@@ -41,5 +43,9 @@ class AnimeItem {
 
   String? get startDate => _startDate;
 
-  int? get id => _id;
+  int get id => _id;
+
+  double? get rating => _rating;
+
+  String? get title => _title;
 }

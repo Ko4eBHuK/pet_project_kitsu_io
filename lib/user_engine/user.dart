@@ -15,13 +15,8 @@ class User {
     this._name = json['data'][0]['attributes']['name'];
     this._bDay = json['data'][0]['attributes']['birthday'];
     this._gender = json['data'][0]['attributes']['gender'];
-
-    this._avatarImageLink =
-        json['data'][0]['attributes']['avatar'] != null ? json['data'][0]['attributes']['avatar']['original'] : null;
-
-    this._coverImageLink =
-        json['data'][0]['attributes']['coverImage'] != null ? json['data'][0]['attributes']['coverImage']['original'] : null;
-
+    this._avatarImageLink = json['data'][0]['attributes']['avatar']?['original'];
+    this._coverImageLink = json['data'][0]['attributes']['coverImage']?['original'];
     this._libraryEntriesLink = json['data'][0]['relationships']['libraryEntries']['links']['related'];
   }
 
