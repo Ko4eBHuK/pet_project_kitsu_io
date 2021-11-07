@@ -36,7 +36,6 @@ class AnimeCard extends StatelessWidget {
                 colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.6), BlendMode.dstATop),
               ),
             ),
-            // TODO - make labels nice looking
             child: Center(
               child: Text(
                 '${_anime.title}\nRating: ${_anime.rating}',
