@@ -69,19 +69,12 @@ Future<List<AnimeItem>> searchAnimeUsingFilters(String query) async {
         }
         AnimeList.add(AnimeItem());
       }
-
-      print(animeCount);
-      AnimeList.forEach((element) {
-        print('${element.title} ${element.rating}');
-      });
-
-      print(url);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
 
     return AnimeList;
   } on SocketException {
-    return AnimeList;
+    return AnimeList..add(AnimeItem());
   }
 }

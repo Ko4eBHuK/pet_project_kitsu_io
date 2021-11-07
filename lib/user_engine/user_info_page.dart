@@ -32,24 +32,24 @@ class UserInfoPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding:
-                              const EdgeInsets.only(left: _basicTextPadding, right: _basicTextPadding, top: _basicTextPadding),
+                          padding: const EdgeInsets.only(
+                              left: _basicTextPadding, right: _basicTextPadding, top: _basicTextPadding),
                           child: Text(
                             'User\'s name: ${currentUser.name}',
                             style: _basicTextStyle,
                           ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.only(left: _basicTextPadding, right: _basicTextPadding, top: _basicTextPadding),
+                          padding: const EdgeInsets.only(
+                              left: _basicTextPadding, right: _basicTextPadding, top: _basicTextPadding),
                           child: Text(
                             'User\'s birth date: ${currentUser.bDay == null ? 'not set' : currentUser.bDay}',
                             style: _basicTextStyle,
                           ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.only(left: _basicTextPadding, right: _basicTextPadding, top: _basicTextPadding),
+                          padding: const EdgeInsets.only(
+                              left: _basicTextPadding, right: _basicTextPadding, top: _basicTextPadding),
                           child: Text(
                             'User\'s gender: ${currentUser.gender == null ? 'not set' : currentUser.gender}',
                             style: _basicTextStyle,
@@ -72,11 +72,11 @@ class UserInfoPage extends StatelessWidget {
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () {
-                          // TODO - navigate to anime_list page that connects to user's library
-                          Navigator.pushNamed(
-                            context,
-                            '/AnimeSearch/Results',
-                          );
+                          // TODO - navigate to anime_list page that connects to user's library (new method in request_engine)
+                          // Navigator.pushNamed(
+                          //   context,
+                          //   '/AnimeSearch/Results',
+                          // );
                         },
                         child: Text(
                           'Show user\'s library',

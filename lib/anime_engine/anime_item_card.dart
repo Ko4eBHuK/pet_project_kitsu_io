@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'animeItem.dart';
 
 class AnimeCard extends StatelessWidget {
@@ -12,8 +13,6 @@ class AnimeCard extends StatelessWidget {
     _width = width;
   }
 
-  // TODO - finish card view
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,24 +20,31 @@ class AnimeCard extends StatelessWidget {
       width: _width,
       child: Card(
         child: InkWell(
-          splashColor: Colors.red.withAlpha(100),
+          splashColor: Colors.red.withAlpha(500),
           onTap: () {
-            print('tap on anime_card');
+            print('tap on anime_card ${_anime.id}');
           },
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.0),
               image: DecorationImage(
-                //image: NetworkImage(_anime.posterImageLink!),
-                image: NetworkImage('https://media.kitsu.io/anime/poster_images/1/original.jpg?1597604210'),
+                image: _anime.posterImageLink != null
+                    ? Image.network(_anime.posterImageLink!).image
+                    : Image.asset('images/no_photo.png').image,
                 fit: BoxFit.fitWidth,
                 alignment: Alignment.topCenter,
+                colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.6), BlendMode.dstATop),
               ),
             ),
+            // TODO - make labels nice looking
             child: Center(
-              child: Text('some anime content'),
+              child: Text(
+                '${_anime.title}\nRating: ${_anime.rating}',
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
+          borderRadius: BorderRadius.circular(30.0),
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),

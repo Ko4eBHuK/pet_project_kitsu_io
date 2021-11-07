@@ -1,9 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'anime_item_card.dart';
 import 'animeItem.dart';
-
-//TODO - connect content with request result
 
 class AnimeList extends StatefulWidget {
   const AnimeList({Key? key}) : super(key: key);
@@ -27,26 +26,34 @@ class _AnimeListState extends State<AnimeList> {
 
   @override
   Widget build(BuildContext context) {
+    List<AnimeItem> animeList = ModalRoute.of(context)!.settings.arguments as List<AnimeItem>;
+    String appBarText = '';
+
+    if (animeList.length > 10) {
+      appBarText = 'Top-10 results';
+      animeList.removeAt(animeList.length - 1);
+    } else
+      appBarText = 'There are ${animeList.length} results';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Anime Search'),
+        title: Text(appBarText),
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
+          //TODO - connect content with request result
           //this algorithm compute how to show items in anime list
 
-          //  this list contains cards, which represent each anime in kitsu's server response
-          List<AnimeCard> animeCardList = [];
-
-          AnimeItem anime = AnimeItem();
           //  this is list of a rows that collects animeCards
           List<Row> rowList = [];
 
           double cardHeight = 200.0;
           double cardWidth = 160.0;
 
-          //test line of code that fills animeCardList
-          while (animeCardList.length < 7) animeCardList.add(AnimeCard(anime, cardHeight, cardWidth));
+          //  this list contains cards, which represent each anime in kitsu.io server response
+          final animeCardList = List<AnimeCard>.generate(animeList.length, (index) {
+            return AnimeCard(animeList[index], cardHeight, cardWidth);
+          });
 
           //  max items in row
           int itemCountInRow = constraints.maxWidth ~/ cardWidth;
