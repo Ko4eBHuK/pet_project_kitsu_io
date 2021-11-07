@@ -12,8 +12,6 @@ class AnimeCard extends StatelessWidget {
     _width = width;
   }
 
-  // TODO - finish card view
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,14 +27,16 @@ class AnimeCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.0),
               image: DecorationImage(
-                //image: NetworkImage(_anime.posterImageLink!),
-                image: NetworkImage('https://media.kitsu.io/anime/poster_images/1/original.jpg?1597604210'),
+                image: _anime.posterImageLink != null
+                    ? NetworkImage(_anime.posterImageLink!)
+                    : Image.asset('images/no_photo.png').image,
                 fit: BoxFit.fitWidth,
                 alignment: Alignment.topCenter,
               ),
             ),
+            // TODO - make labels nice looking
             child: Center(
-              child: Text('some anime content'),
+              child: Text('${_anime.title}\nRating: ${_anime.rating}'),
             ),
           ),
         ),

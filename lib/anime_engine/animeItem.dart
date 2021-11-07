@@ -1,7 +1,7 @@
 class AnimeItem {
   int _id = -1;
   String? _title;
-  double? _rating;
+  String? _rating;
   String? _startDate;
   String? _description;
   String? _ageRating;
@@ -16,7 +16,7 @@ class AnimeItem {
   AnimeItem.fromJson(Map<String, dynamic> json) {
     _id = int.parse(json['id']);
     _title = json['attributes']['canonicalTitle'];
-    _rating = double.parse(json['attributes']['averageRating']);
+    _rating = json['attributes']['averageRating'];
     _startDate = json['attributes']['startDate'];
     _description = json['attributes']['description'];
     _ageRating = json['attributes']['ageRating'];
@@ -45,7 +45,7 @@ class AnimeItem {
 
   int get id => _id;
 
-  double? get rating => _rating;
+  String? get rating => _rating;
 
   String? get title => _title;
 }

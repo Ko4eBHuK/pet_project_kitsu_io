@@ -75,9 +75,8 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
     // to return results in rating from TOP-1 to TOP-10 by user rating
     String query = 'sort=-averageRating';
 
-    final textFilterRequestString = textFilterController.text;
-
     // composing text filter part to query
+    final textFilterRequestString = textFilterController.text;
     if (textFilterRequestString.length > 0) {
       query += '&filter[text]=';
       query += textFilterRequestString.replaceAll(' ', '+');
@@ -253,10 +252,45 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                               setState(() {
                                 _searchButtonNeighbour = Container();
                               });
-                              // Navigator.pushNamed(
-                              //   context,
-                              //   '/AnimeSearch/Results',
-                              // );
+
+                              if (responsedAnimeList.length != 0) {
+                                if (responsedAnimeList[0].id != -1) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/AnimeSearch/Results',
+                                    arguments: responsedAnimeList,
+                                  );
+                                } else {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) => AlertDialog(
+                                      title: const Text('Internet connection error'),
+                                      content: const Text('Check your network'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context, 'OK'),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              } else {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) => AlertDialog(
+                                    title: const Text('Anime not found'),
+                                    content: const Text(
+                                        'No anime corresponds with your filters, anyway you may try again :3'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, 'OK'),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                             },
                             child: Text(
                               'Search',
@@ -274,7 +308,6 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
               ),
             ),
           );
-          //test area
         },
       ),
     );
