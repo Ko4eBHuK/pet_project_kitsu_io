@@ -20,11 +20,12 @@ class AnimeCard extends StatelessWidget {
       width: _width,
       child: Card(
         child: InkWell(
-          splashColor: Colors.red.withAlpha(500),
+          splashColor: const Color(0xff4a0072).withAlpha(200),
           onTap: () {
+            // TODO - navigate to animeItem info page
             print('tap on anime_card ${_anime.id}');
           },
-          child: Container(
+          child: Ink(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.0),
               image: DecorationImage(
@@ -33,13 +34,18 @@ class AnimeCard extends StatelessWidget {
                     : Image.asset('images/no_photo.png').image,
                 fit: BoxFit.fitWidth,
                 alignment: Alignment.topCenter,
-                colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.6), BlendMode.dstATop),
               ),
             ),
             child: Center(
-              child: Text(
-                '${_anime.title}\nRating: ${_anime.rating}',
-                textAlign: TextAlign.center,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xff4a0072).withOpacity(0.8),
+                ),
+                child: Text(
+                  '${_anime.title}\nRating: ${_anime.rating}',
+                  textAlign: TextAlign.center,
+                ),
+                width: _width,
               ),
             ),
           ),

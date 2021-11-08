@@ -33,7 +33,7 @@ class _AnimeListState extends State<AnimeList> {
       appBarText = 'Top-10 results';
       animeList.removeAt(animeList.length - 1);
     } else
-      appBarText = 'There are ${animeList.length} results';
+      appBarText = '${animeList.length} anime here';
 
     return Scaffold(
       appBar: AppBar(
@@ -41,14 +41,13 @@ class _AnimeListState extends State<AnimeList> {
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          //TODO - connect content with request result
           //this algorithm compute how to show items in anime list
 
           //  this is list of a rows that collects animeCards
           List<Row> rowList = [];
 
           double cardHeight = 200.0;
-          double cardWidth = 160.0;
+          double cardWidth = 170.0;
 
           //  this list contains cards, which represent each anime in kitsu.io server response
           final animeCardList = List<AnimeCard>.generate(animeList.length, (index) {

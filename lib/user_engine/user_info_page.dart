@@ -1,13 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:pet_project_kitsu_io/anime_engine/animeItem.dart';
+import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:pet_project_kitsu_io/user_engine/user.dart';
 
-class UserInfoPage extends StatelessWidget {
+class UserInfoPage extends StatefulWidget {
+  const UserInfoPage({Key? key}) : super(key: key);
+
+  @override
+  _UserInfoPageState createState() => _UserInfoPageState();
+}
+
+class _UserInfoPageState extends State<UserInfoPage> {
+  Widget _libraryButtonNeighbour = Container();
+
   @override
   Widget build(BuildContext context) {
     final currentUser = ModalRoute.of(context)!.settings.arguments as User;
     var _basicTextStyle = TextStyle(
-      fontSize: 20,
+      fontSize: 18,
     );
     const double _basicTextPadding = 20.0;
 
@@ -68,20 +80,74 @@ class UserInfoPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(_basicTextPadding),
                     child: SizedBox(
-                      width: 200,
                       height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // TODO - navigate to anime_list page that connects to user's library (new method in request_engine)
-                          // Navigator.pushNamed(
-                          //   context,
-                          //   '/AnimeSearch/Results',
-                          // );
-                        },
-                        child: Text(
-                          'Show user\'s library',
-                          style: _basicTextStyle,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _libraryButtonNeighbour,
+                          ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                _libraryButtonNeighbour = SpinKitWave(
+                                  color: Colors.white,
+                                  size: 50.0,
+                                );
+                              });
+
+                              // request performs here
+                              List<AnimeItem> responsedAnimeList =
+                                  await searchAnimeUserLibrary(currentUser.id);
+
+                              setState(() {
+                                _libraryButtonNeighbour = Container();
+                              });
+
+                              if (responsedAnimeList.length != 0) {
+                                if (responsedAnimeList[0].id != -1) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/AnimeSearch/Results',
+                                    arguments: responsedAnimeList,
+                                  );
+                                } else {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) => AlertDialog(
+                                      title: const Text('Internet connection error'),
+                                      content: const Text('Check your network'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context, 'OK'),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              } else {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) => AlertDialog(
+                                    title: const Text('Anime not found'),
+                                    content:
+                                        Text('There are no anime in ${currentUser.name}\'s library'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, 'OK'),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Show user\'s library',
+                              style: _basicTextStyle,
+                            ),
+                          ),
+                          _libraryButtonNeighbour,
+                        ],
                       ),
                     ),
                   ),
@@ -109,7 +175,6 @@ class UserInfoPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(_basicTextPadding),
                     child: Card(
-//shape: ,
                       child: Column(
                         children: [
                           Divider(
