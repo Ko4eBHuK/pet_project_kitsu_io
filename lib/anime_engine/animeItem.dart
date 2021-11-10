@@ -10,6 +10,7 @@ class AnimeItem {
   int? _episodeCount;
   int? _episodeLength;
   String? _showType;
+  String? _slug;
 
   AnimeItem();
 
@@ -25,7 +26,10 @@ class AnimeItem {
     _episodeCount = json['attributes']['episodeCount'];
     _episodeLength = json['attributes']['episodeLength'];
     _showType = json['attributes']['showType'];
+    _slug = json['attributes']['slug'];
   }
+
+  String? get slug => _slug;
 
   String? get showType => _showType;
 

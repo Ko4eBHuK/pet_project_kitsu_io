@@ -12,7 +12,6 @@ class AnimeList extends StatefulWidget {
 }
 
 class _AnimeListState extends State<AnimeList> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final filtersTextController = TextEditingController();
 
   @override

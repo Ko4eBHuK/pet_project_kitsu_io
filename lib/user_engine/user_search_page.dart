@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_project_kitsu_io/user_engine/user.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'dart:io';
 
 class UserSearchPage extends StatefulWidget {
   const UserSearchPage({Key? key}) : super(key: key);
@@ -89,7 +87,8 @@ class _UserSearchPageState extends State<UserSearchPage> {
                                       );
                                     });
 
-                                    Future searchableUser = searchUserByName(usernameTextController.text);
+                                    Future searchableUser =
+                                        searchUserByName(usernameTextController.text);
 
                                     searchableUser.then(
                                       (readyUser) {

@@ -22,8 +22,11 @@ class AnimeCard extends StatelessWidget {
         child: InkWell(
           splashColor: const Color(0xff4a0072).withAlpha(200),
           onTap: () {
-            // TODO - navigate to animeItem info page
-            print('tap on anime_card ${_anime.id}');
+            Navigator.pushNamed(
+              context,
+              '/AnimeSearch/Item',
+              arguments: _anime,
+            );
           },
           child: Ink(
             decoration: BoxDecoration(

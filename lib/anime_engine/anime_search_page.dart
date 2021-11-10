@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
@@ -45,8 +43,6 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
   );
 
   Widget _searchButtonNeighbour = Container();
-
-  var _spinWaveColor = Colors.white10;
 
   List<Widget> _createAgeRatingFilterRowChildren() {
     return new List<Widget>.generate(
