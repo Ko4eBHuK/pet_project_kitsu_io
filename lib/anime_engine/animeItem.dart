@@ -1,15 +1,15 @@
 class AnimeItem {
   int _id = -1;
   String? _title;
-  String? _rating;
-  String? _startDate;
   String? _description;
+  String? _rating;
   String? _ageRating;
-  String? _posterImageLink;
-  String? _coverImageLing;
+  String? _startDate;
   int? _episodeCount;
   int? _episodeLength;
   String? _showType;
+  String? _posterImageLink;
+  String? _coverImageLing;
   String? _slug;
 
   AnimeItem();

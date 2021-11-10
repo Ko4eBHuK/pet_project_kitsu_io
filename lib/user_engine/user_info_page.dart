@@ -18,7 +18,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ModalRoute.of(context)!.settings.arguments as User;
-    var _basicTextStyle = TextStyle(
+    final _basicTextStyle = TextStyle(
       fontSize: 18,
     );
     const double _basicTextPadding = 20.0;
@@ -156,18 +156,16 @@ class _UserInfoPageState extends State<UserInfoPage> {
                     child: Card(
                       child: Column(
                         children: [
-                          Divider(
+                          const Divider(
                             color: Colors.purpleAccent,
                             thickness: 1,
                           ),
                           Text('${currentUser.name}\'s avatar'),
-                          Divider(
+                          const Divider(
                             color: Colors.purpleAccent,
                             thickness: 1,
                           ),
-                          currentUser.avatarImageLink == null
-                              ? Image.asset('images/no_photo.png')
-                              : Image.network(currentUser.avatarImageLink!),
+                          showNetworkImage(currentUser.avatarImageLink),
                         ],
                       ),
                     ),
@@ -177,18 +175,16 @@ class _UserInfoPageState extends State<UserInfoPage> {
                     child: Card(
                       child: Column(
                         children: [
-                          Divider(
+                          const Divider(
                             color: Colors.purpleAccent,
                             thickness: 1,
                           ),
                           Text('${currentUser.name}\'s cover'),
-                          Divider(
+                          const Divider(
                             color: Colors.purpleAccent,
                             thickness: 1,
                           ),
-                          currentUser.coverImageLink == null
-                              ? Image.asset('images/no_photo.png')
-                              : Image.network(currentUser.coverImageLink!),
+                          showNetworkImage(currentUser.coverImageLink),
                         ],
                       ),
                     ),
@@ -201,4 +197,19 @@ class _UserInfoPageState extends State<UserInfoPage> {
       ),
     );
   }
+}
+
+Image showNetworkImage(String? link) {
+  Image result;
+
+  try {
+    if (link != null)
+      result = Image.network(link);
+    else
+      result = Image.asset('images/no_photo.png');
+  } catch (e) {
+    result = Image.asset('images/no_photo.png');
+  }
+
+  return result;
 }

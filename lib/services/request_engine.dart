@@ -66,7 +66,7 @@ Future<List<AnimeItem>> searchAnimeUserLibrary(int id) async {
             .get(Uri.parse(jsonLibraryList['data'][i]['relationships']['anime']['links']['related']));
         animeJson = convert.jsonDecode(animeResponse.body) as Map<String, dynamic>;
 
-        AnimeList.add(AnimeItem.fromJson(animeJson['data']));
+        if (animeJson['data'] != null) AnimeList.add(AnimeItem.fromJson(animeJson['data']));
         i++;
       }
 
