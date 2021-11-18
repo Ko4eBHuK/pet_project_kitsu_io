@@ -1,4 +1,6 @@
 class User {
+  // TODO - try to avoid nullable fields
+
   int _id = 0;
   String _name = '';
   String? _bDay;

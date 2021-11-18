@@ -110,6 +110,7 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
     super.dispose();
   }
 
+  // TODO - redo of design
   @override
   Widget build(BuildContext context) {
     return Scaffold(

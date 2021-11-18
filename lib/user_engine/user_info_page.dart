@@ -204,7 +204,12 @@ Image showNetworkImage(String? link) {
 
   try {
     if (link != null)
-      result = Image.network(link);
+      result = Image.network(
+        link,
+        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+          return Image.asset('images/no_photo.png');
+        },
+      );
     else
       result = Image.asset('images/no_photo.png');
   } catch (e) {

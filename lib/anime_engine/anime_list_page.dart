@@ -23,6 +23,7 @@ class _AnimeListState extends State<AnimeList> {
   List<AnimeCard> animeCardList = [];
   AnimeItem anime = AnimeItem();
 
+  // TODO - add infinite load list (may use side lib)
   @override
   Widget build(BuildContext context) {
     List<AnimeItem> animeList = ModalRoute.of(context)!.settings.arguments as List<AnimeItem>;

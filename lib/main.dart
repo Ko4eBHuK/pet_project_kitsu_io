@@ -10,6 +10,8 @@ import 'anime_engine/anime_search_page.dart';
 import 'anime_engine/anime_list_page.dart';
 import 'anime_engine/anime_info_page.dart';
 
+// TODO - apply conventions to source code, make routes as constants
+
 void main() {
   runApp(App());
 }

@@ -1,4 +1,6 @@
 class AnimeItem {
+  // TODO - try to avoid nullable fields
+
   int _id = -1;
   String? _title;
   String? _description;
