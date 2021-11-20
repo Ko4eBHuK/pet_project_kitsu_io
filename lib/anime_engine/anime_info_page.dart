@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_project_kitsu_io/anime_engine/animeItem.dart';
-import 'package:pet_project_kitsu_io/user_engine/user_info_page.dart';
+import 'package:pet_project_kitsu_io/anime_engine/AnimeItem.dart';
+import 'package:pet_project_kitsu_io/services/show_image_logic.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:expandable/expandable.dart';
 

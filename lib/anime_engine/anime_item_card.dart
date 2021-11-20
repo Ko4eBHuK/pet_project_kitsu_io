@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'animeItem.dart';
+import 'AnimeItem.dart';
 
 class AnimeCard extends StatelessWidget {
   late final AnimeItem _anime;

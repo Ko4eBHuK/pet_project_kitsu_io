@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'animeItem.dart';
+import 'AnimeItem.dart';
 
 class AnimeSearchPage extends StatefulWidget {
   const AnimeSearchPage({Key? key}) : super(key: key);

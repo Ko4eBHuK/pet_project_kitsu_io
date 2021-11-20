@@ -1,8 +1,10 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
+import 'package:http/http.dart' as http;
+
 import '/user_engine/user.dart';
-import '/anime_engine/animeItem.dart';
+import '/anime_engine/AnimeItem.dart';
 
 Future<User> searchUserByName(String userName) async {
   var url = Uri.parse('https://kitsu.io/api/edge/users?filter[name]=$userName');
@@ -37,7 +39,7 @@ Future<User> searchUserByName(String userName) async {
 }
 
 Future<List<AnimeItem>> searchAnimeUserLibrary(int id) async {
-  List<AnimeItem> AnimeList = [];
+  List<AnimeItem> animeList = [];
 
   final url = 'https://kitsu.io/api/edge/users/$id/library-entries';
 
@@ -66,25 +68,28 @@ Future<List<AnimeItem>> searchAnimeUserLibrary(int id) async {
             .get(Uri.parse(jsonLibraryList['data'][i]['relationships']['anime']['links']['related']));
         animeJson = convert.jsonDecode(animeResponse.body) as Map<String, dynamic>;
 
-        if (animeJson['data'] != null) AnimeList.add(AnimeItem.fromJson(animeJson['data']));
+        if (animeJson['data'] != null) animeList.add(AnimeItem.fromJson(animeJson['data']));
         i++;
       }
 
-      if (animeCount > 10) AnimeList.add(AnimeItem());
+      if (animeCount > 10) animeList.add(AnimeItem());
     } else {
       print('Request failed with status: ${libraryResponse.statusCode}.');
     }
   } on SocketException {
-    return AnimeList..add(AnimeItem());
+    // if there is problem with network, then push "service" anime as only element in animeList
+    return animeList..add(AnimeItem());
   }
 
-  return AnimeList;
+  return animeList;
 }
+
+//https://kitsu.io/api/edge/anime?filter[text]=guts&page[limit]=10&page[offset]=20
 
 Future<List<AnimeItem>> searchAnimeUsingFilters(String query) async {
   final url = 'https://kitsu.io/api/edge/anime?$query';
 
-  List<AnimeItem> AnimeList = [];
+  List<AnimeItem> animeList = [];
 
   try {
     final response = await http.get(Uri.parse(url));
@@ -95,28 +100,30 @@ Future<List<AnimeItem>> searchAnimeUsingFilters(String query) async {
       final animeCount = jsonAnimeList['meta']['count'];
 
       // logic of composing anime list:
-      //    1) if there are 1 to 10 animes, then just push them to list
-      //    2) if there are more than 10 animes, then push top-10 animes and one more "service" anime,
-      //    which has id equals -1
+      //    1) add all anime from response to list
+      //    2) add "service" anime to the end, id of it is -1, title is applied filter(query),
+      //    episodeCount is count of results in request(animeCount)
       //    3) if there are no animes, do nothing
       // this logic helps to show info for user
 
+      // TODO - rewrite according of comments above
+
       if (animeCount <= 10) {
         for (int i = 0; i < animeCount; i++) {
-          AnimeList.add(AnimeItem.fromJson(jsonAnimeList['data'][i]));
+          animeList.add(AnimeItem.fromJson(jsonAnimeList['data'][i]));
         }
       } else {
         for (int i = 0; i < 10; i++) {
-          AnimeList.add(AnimeItem.fromJson(jsonAnimeList['data'][i]));
+          animeList.add(AnimeItem.fromJson(jsonAnimeList['data'][i]));
         }
-        AnimeList.add(AnimeItem());
       }
+      animeList.add(AnimeItem());
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
 
-    return AnimeList;
+    return animeList;
   } on SocketException {
-    return AnimeList..add(AnimeItem());
+    return animeList..add(AnimeItem());
   }
 }

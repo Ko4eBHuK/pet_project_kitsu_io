@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:pet_project_kitsu_io/anime_engine/animeItem.dart';
+import 'package:pet_project_kitsu_io/anime_engine/AnimeItem.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
+import 'package:pet_project_kitsu_io/services/show_image_logic.dart';
 import 'package:pet_project_kitsu_io/user_engine/user.dart';
 
 class UserInfoPage extends StatefulWidget {
@@ -197,24 +198,4 @@ class _UserInfoPageState extends State<UserInfoPage> {
       ),
     );
   }
-}
-
-Image showNetworkImage(String? link) {
-  Image result;
-
-  try {
-    if (link != null)
-      result = Image.network(
-        link,
-        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-          return Image.asset('images/no_photo.png');
-        },
-      );
-    else
-      result = Image.asset('images/no_photo.png');
-  } catch (e) {
-    result = Image.asset('images/no_photo.png');
-  }
-
-  return result;
 }
