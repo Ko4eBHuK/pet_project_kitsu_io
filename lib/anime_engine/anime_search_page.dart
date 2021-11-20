@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../main.dart';
 import 'AnimeItem.dart';
 
 class AnimeSearchPage extends StatefulWidget {
@@ -250,11 +251,12 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                                 _searchButtonNeighbour = Container();
                               });
 
+                              // TODO - change logic below corresponds to searchAnimeUsingFilters result logic
                               if (responsedAnimeList.length != 0) {
                                 if (responsedAnimeList[0].id != -1) {
                                   Navigator.pushNamed(
                                     context,
-                                    '/AnimeSearch/Results',
+                                    animeSearchResultRoute,
                                     arguments: responsedAnimeList,
                                   );
                                 } else {

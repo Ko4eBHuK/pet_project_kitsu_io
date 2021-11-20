@@ -6,6 +6,8 @@ import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:pet_project_kitsu_io/services/show_image_logic.dart';
 import 'package:pet_project_kitsu_io/user_engine/user.dart';
 
+import '../main.dart';
+
 class UserInfoPage extends StatefulWidget {
   const UserInfoPage({Key? key}) : super(key: key);
 
@@ -107,7 +109,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                 if (responsedAnimeList[0].id != -1) {
                                   Navigator.pushNamed(
                                     context,
-                                    '/AnimeSearch/Results',
+                                    animeSearchResultRoute,
                                     arguments: responsedAnimeList,
                                   );
                                 } else {

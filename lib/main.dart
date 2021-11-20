@@ -11,6 +11,12 @@ import 'anime_engine/anime_list_page.dart';
 import 'anime_engine/anime_info_page.dart';
 
 // TODO - apply conventions to source code, make routes as constants
+const String rootRoute = '/';
+const String userSearchRoute = '/UserSearch';
+const String animeSearchRoute = '/AnimeSearch';
+const String userSearchResultRoute = '/UserSearch/Result';
+const String animeSearchResultRoute = '/AnimeSearch/Results';
+const String animeItemRoute = '/AnimeSearch/Item';
 
 void main() {
   runApp(App());
@@ -46,14 +52,14 @@ class App extends StatelessWidget {
           backgroundColor: const Color(0xff4a0072),
         ),
       ),
-      initialRoute: '/',
+      initialRoute: rootRoute,
       routes: {
-        '/': (context) => HomePage(title: 'KITSU.IO APP home page'),
-        '/UserSearch': (context) => UserSearchPage(),
-        '/AnimeSearch': (context) => AnimeSearchPage(),
-        '/UserSearch/Result': (context) => UserInfoPage(),
-        '/AnimeSearch/Results': (context) => AnimeList(),
-        '/AnimeSearch/Item': (context) => AnimeInfoPage(),
+        rootRoute: (context) => HomePage(title: 'KITSU.IO APP home page'),
+        userSearchRoute: (context) => UserSearchPage(),
+        animeSearchRoute: (context) => AnimeSearchPage(),
+        userSearchResultRoute: (context) => UserInfoPage(),
+        animeSearchResultRoute: (context) => AnimeList(),
+        animeItemRoute: (context) => AnimeInfoPage(),
       },
     );
   }

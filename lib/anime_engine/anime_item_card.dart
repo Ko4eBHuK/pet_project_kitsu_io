@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../main.dart';
 import 'AnimeItem.dart';
 
 class AnimeCard extends StatelessWidget {
@@ -24,7 +25,7 @@ class AnimeCard extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(
               context,
-              '/AnimeSearch/Item',
+              animeItemRoute,
               arguments: _anime,
             );
           },

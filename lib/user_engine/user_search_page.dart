@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../main.dart';
+
 class UserSearchPage extends StatefulWidget {
   const UserSearchPage({Key? key}) : super(key: key);
 
@@ -131,7 +133,7 @@ class _UserSearchPageState extends State<UserSearchPage> {
                                           default:
                                             Navigator.pushNamed(
                                               context,
-                                              '/UserSearch/Result',
+                                              userSearchResultRoute,
                                               arguments: readyUser,
                                             );
                                         }
