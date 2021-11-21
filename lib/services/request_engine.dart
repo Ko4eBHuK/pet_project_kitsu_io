@@ -1,18 +1,18 @@
 import 'dart:io';
 import 'dart:convert' as convert;
 
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as HTTP;
 
-import '/user_engine/user.dart';
+import '/user_engine/User.dart';
 import '/anime_engine/AnimeItem.dart';
 
 Future<User> searchUserByName(String userName) async {
   var url = Uri.parse('https://kitsu.io/api/edge/users?filter[name]=$userName');
 
-  User gettedUser = User();
+  User gettedUser = User(id: 0);
 
   try {
-    final response = await http.get(url);
+    final response = await HTTP.get(url);
 
     if (response.statusCode == 200) {
       final jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
@@ -21,7 +21,7 @@ Future<User> searchUserByName(String userName) async {
         gettedUser = User.fromJson(jsonResponse);
 
         var waifuResponse =
-            await http.get(Uri.parse('https://kitsu.io/api/edge/users/${gettedUser.id}/waifu'));
+            await HTTP.get(Uri.parse('https://kitsu.io/api/edge/users/${gettedUser.id}/waifu'));
         var waifuJsonResponse = convert.jsonDecode(waifuResponse.body) as Map<String, dynamic>;
         gettedUser.waifuName = waifuJsonResponse['data'] != null
             ? waifuJsonResponse['data']['attributes']['canonicalName']
@@ -44,7 +44,7 @@ Future<List<AnimeItem>> searchAnimeUserLibrary(int id) async {
   final url = 'https://kitsu.io/api/edge/users/$id/library-entries';
 
   try {
-    final libraryResponse = await http.get(Uri.parse(url));
+    final libraryResponse = await HTTP.get(Uri.parse(url));
 
     if (libraryResponse.statusCode == 200) {
       final jsonLibraryList = convert.jsonDecode(libraryResponse.body) as Map<String, dynamic>;
@@ -64,7 +64,7 @@ Future<List<AnimeItem>> searchAnimeUserLibrary(int id) async {
       var animeResponse;
       Map<String, dynamic> animeJson;
       while (i < 10 && i < animeCount) {
-        animeResponse = await http
+        animeResponse = await HTTP
             .get(Uri.parse(jsonLibraryList['data'][i]['relationships']['anime']['links']['related']));
         animeJson = convert.jsonDecode(animeResponse.body) as Map<String, dynamic>;
 
@@ -72,13 +72,13 @@ Future<List<AnimeItem>> searchAnimeUserLibrary(int id) async {
         i++;
       }
 
-      if (animeCount > 10) animeList.add(AnimeItem());
+      if (animeCount > 10) animeList.add(AnimeItem(id: -1));
     } else {
       print('Request failed with status: ${libraryResponse.statusCode}.');
     }
   } on SocketException {
     // if there is problem with network, then push "service" anime as only element in animeList
-    return animeList..add(AnimeItem());
+    return animeList..add(AnimeItem(id: -1));
   }
 
   return animeList;
@@ -92,7 +92,7 @@ Future<List<AnimeItem>> searchAnimeUsingFilters(String query) async {
   List<AnimeItem> animeList = [];
 
   try {
-    final response = await http.get(Uri.parse(url));
+    final response = await HTTP.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final jsonAnimeList = convert.jsonDecode(response.body) as Map<String, dynamic>;
@@ -116,14 +116,14 @@ Future<List<AnimeItem>> searchAnimeUsingFilters(String query) async {
         for (int i = 0; i < 10; i++) {
           animeList.add(AnimeItem.fromJson(jsonAnimeList['data'][i]));
         }
+        animeList.add(AnimeItem(id: -1, title: query, episodeCount: animeCount));
       }
-      animeList.add(AnimeItem());
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
 
     return animeList;
   } on SocketException {
-    return animeList..add(AnimeItem());
+    return animeList..add(AnimeItem(id: -1));
   }
 }

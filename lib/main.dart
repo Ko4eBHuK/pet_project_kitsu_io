@@ -10,7 +10,7 @@ import 'anime_engine/anime_search_page.dart';
 import 'anime_engine/anime_list_page.dart';
 import 'anime_engine/anime_info_page.dart';
 
-// TODO - apply conventions to source code, make routes as constants
+// TODO - apply conventions to source code
 const String rootRoute = '/';
 const String userSearchRoute = '/UserSearch';
 const String animeSearchRoute = '/AnimeSearch';

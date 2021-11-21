@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pet_project_kitsu_io/anime_engine/AnimeItem.dart';
 import 'package:pet_project_kitsu_io/services/request_engine.dart';
 import 'package:pet_project_kitsu_io/services/show_image_logic.dart';
-import 'package:pet_project_kitsu_io/user_engine/user.dart';
+import 'package:pet_project_kitsu_io/user_engine/User.dart';
 
 import '../main.dart';
 

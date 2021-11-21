@@ -170,6 +170,7 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                                   ),
                                 ),
                                 _divider,
+                                // TODO - make text tappable as checkbox
                                 Text('Age rating'),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -179,6 +180,7 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                                 Container(
                                   child: Column(
                                     children: [
+                                      // TODO - make text tappable as checkbox
                                       Text('Streamers'),
                                       ListView.builder(
                                         itemCount: _streamersMap.length,
@@ -251,7 +253,6 @@ class _AnimeSearchPageState extends State<AnimeSearchPage> {
                                 _searchButtonNeighbour = Container();
                               });
 
-                              // TODO - change logic below corresponds to searchAnimeUsingFilters result logic
                               if (responsedAnimeList.length != 0) {
                                 if (responsedAnimeList[0].id != -1) {
                                   Navigator.pushNamed(

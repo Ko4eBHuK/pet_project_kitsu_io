@@ -61,7 +61,6 @@ class _AnimeListState extends State<AnimeList> {
   Widget _animeListColumn = Column();
 
   List<AnimeCard> animeCardList = [];
-  AnimeItem anime = AnimeItem();
 
   // TODO - add infinite load list (may use side lib)
   @override
